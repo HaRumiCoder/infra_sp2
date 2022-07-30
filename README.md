@@ -38,10 +38,11 @@
 }
 ```
 
+
 ## Переменные окружения .env
 
 Проект работает с базой данных Postgres, для подключения к которой необходимы данные.
-Чтобы передать их в докер контейнер проекта необходимо создать файл .env по следующему шпблоны
+Чтобы передать их в докер контейнер проекта необходимо создать файл .env по следующему шаблону
 
 ```yaml
 DB_ENGINE=django.db.backends.postgresql
@@ -52,12 +53,14 @@ DB_HOST=db
 DB_PORT=5432
 ```
 
+
 ## Запуск приложения в контейнерах Docker
 
 - Склонируйте папку проекта на ваш компьютер
 
 ``` git clone https://github.com/HaRumiCoder/infra_sp2.git ```
-Перейдите в папку с файлом docker-compose.yaml
+
+-Перейдите в папку с файлом docker-compose.yaml
 
 ``` cd infra/ ```
 
@@ -79,6 +82,7 @@ DB_PORT=5432
 ``` docker-compose exec web python manage.py collectstatic --no-input ```
 
 - Далее проект будет доступен по адресу *http://localhost/*
+
 
 ## Заполнение базы данными
 
