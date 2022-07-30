@@ -54,15 +54,18 @@ DB_PORT=5432
 
 ## Запуск приложения в контейнерах Docker
 
+- Склонируйте папку проекта на ваш компьютер
+
+``` git clone https://github.com/HaRumiCoder/infra_sp2.git ```
 Перейдите в папку с файлом docker-compose.yaml
 
 ``` cd infra/ ```
 
-Создайте контейнеры (web, db, nginx)
+- Создайте контейнеры (web, db, nginx)
 
 ``` docker-compose up ```
 
-В контейнере web сделайте миграции, создайте суперюзера django и соберите статику в папку api_yamdb/static/
+- В контейнере web сделайте миграции, создайте суперюзера django и соберите статику в папку api_yamdb/static/
 
 ``` docker-compose exec web python manage.py migrate ```
 
@@ -71,12 +74,11 @@ DB_PORT=5432
 > в готовой фикстуре уже имеется супер юзер с данными
 
 > login: admin25
-
 > password: qwerty1
 
 ``` docker-compose exec web python manage.py collectstatic --no-input ```
 
-Далее проект будет доступен по адресу * http://localhost/ *
+- Далее проект будет доступен по адресу *http://localhost/*
 
 ## Заполнение базы данными
 
