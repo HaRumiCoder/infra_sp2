@@ -4,9 +4,10 @@ from django.db import models
 
 from api_yamdb.settings import ROLES
 
+
 class User(AbstractUser):
     USERNAME_FIELDS = 'username'
-    
+
     bio = models.TextField(
         blank=True,
         null=True,
@@ -66,6 +67,7 @@ class Title(models.Model):
     def __str__(self):
         return self.name
 
+
 class Message(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(
@@ -74,7 +76,7 @@ class Message(models.Model):
     )
 
     class Meta:
-        abstract=True
+        abstract = True
         ordering = ('id',)
 
     def __str__(self):

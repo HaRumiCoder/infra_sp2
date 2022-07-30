@@ -9,12 +9,11 @@ from rest_framework import filters, generics, permissions, status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
 
 
 from reviews.models import Category, Genre, Title, User, Review
-from api.permissions import (IsModerUserPermission, IsAdminUserPermission,
-                             ReadOnly, IsOwnerOrReadOnly, CreateCommentOrRewiewPermission)
+from api.permissions import (IsAdminUserPermission, ReadOnly,
+                             CreateCommentOrRewiewPermission)
 from api.serializer import (CategorySerializer, CommentSerializer,
                             CreateTokenSerializer, CreateUserSerializer,
                             GenreSerializer, ReviewSerializer,
@@ -45,6 +44,7 @@ class CategoryViewSet(ListOrCreateOrDeleteViewsSet):
     lookup_field = 'slug'
     ordering_fields = ('id',)
 
+
 class GenreViewSet(ListOrCreateOrDeleteViewsSet):
     permission_classes = [ReadOnly | IsAdminUserPermission]
     queryset = Genre.objects.all()
@@ -61,9 +61,10 @@ class TitlesViewSet(viewsets.ModelViewSet):
         rating=Avg('reviews__score'))
     permission_classes = [ReadOnly | IsAdminUserPermission]
     pagination_class = PageNumberPagination
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter, TitleFilterBackend)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter,
+                       TitleFilterBackend)
     filterset_fields = ('year',)
-    ordering_fields = ('id',) 
+    ordering_fields = ('id',)
 
     def get_serializer_class(self):
         if self.action in ['create', 'partial_update']:
@@ -128,7 +129,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     permission_classes = [CreateCommentOrRewiewPermission]
 
-
     def get_queryset(self):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
         return title.reviews.all()
@@ -136,12 +136,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
         serializer.save(author=self.request.user, title=title)
-    
-    # def get_permissions(self):
-    #     print(self.action)
-    #     if self.action == 'partial_update':
-    #         return [permission() for permission in [IsAdminUserPermission & IsOwnerOrReadOnly]] 
-    #     return [permission() for permission in  [ReadOnly | IsAuthenticated]]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -151,10 +145,16 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         review = get_object_or_404(
-            Review, title__id=self.kwargs.get('title_id'), id=self.kwargs.get('review_id'))
+            Review,
+            title__id=self.kwargs.get('title_id'),
+            id=self.kwargs.get('review_id')
+        )
         return review.comments.all()
 
     def perform_create(self, serializer):
         review = get_object_or_404(
-            Review, title__id=self.kwargs.get('title_id'), id=self.kwargs.get('review_id'))
+            Review,
+            title__id=self.kwargs.get('title_id'),
+            id=self.kwargs.get('review_id')
+        )
         serializer.save(author=self.request.user, review=review)

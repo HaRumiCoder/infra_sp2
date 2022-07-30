@@ -2,6 +2,7 @@ from rest_framework import permissions
 
 from api_yamdb.settings import ADMIN, MODERATOR
 
+
 class IsAdminUserPermission(permissions.BasePermission):
     message = {'detail': 'Недостаточно прав доступа'}
 
@@ -18,26 +19,6 @@ class ReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.method in permissions.SAFE_METHODS
 
-
-class IsModerUserPermission(permissions.BasePermission):
-    message = {'detail': 'Недостаточно прав доступа'}
-
-    def has_permission(self, request, view):
-        return (
-            request.user.is_authenticated
-            and request.user.role == MODERATOR
-        )
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    message = {'detail': 'Недостаточно прав доступа'}
-
-    def has_permission(self, request, view):
-        return request.method == 'PATCH'
-    
-    def has_object_permission(self, request, view, obj):
-        print(obj.author == request.user)
-        return obj.author == request.user
-    
 
 class CreateCommentOrRewiewPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -60,4 +41,3 @@ class CreateCommentOrRewiewPermission(permissions.BasePermission):
                 )
             )
         )
-
